@@ -1,0 +1,45 @@
+diff --git a/node_modules/knex/lib/dialects/postgres/runner.js b/node_modules/knex/lib/dialects/postgres/runner.js
+index 296a5c0..d117d63 100644
+--- a/node_modules/knex/lib/dialects/postgres/runner.js
++++ b/node_modules/knex/lib/dialects/postgres/runner.js
+@@ -23,9 +23,20 @@ Runner_PG.prototype._stream = Promise.method(function(obj, stream, options) {
+   var sql = obj.sql = this.client.positionBindings(obj.sql);
+   if (this.isDebugging()) this.debug(obj);
+   return new Promise(function(resolver, rejecter) {
+-    stream.on('error', rejecter);
++    // stream.on('error', rejecter);
++    // stream.on('end', resolver);
++    // runner.connection.query(new PGQueryStream(sql, obj.bindings, options)).pipe(stream);
++    var queryStream = runner.connection.query(new PGQueryStream(sql, obj.bindings, options, function(error){
++      rejecter(err);
++    }))
++
++    queryStream.on('error', function (error) {
++      rejecter(error);
++      stream.emit('error', error);
++    });
++  
+     stream.on('end', resolver);
+-    runner.connection.query(new PGQueryStream(sql, obj.bindings, options)).pipe(stream);
++    queryStream.pipe(stream);
+   });
+ });
+ 
+@@ -77,4 +88,4 @@ Runner_PG.prototype.processResponse = function(obj) {
+ // Assign the newly extended `Runner` constructor to the client object.
+ client.Runner = Runner_PG;
+ 
+-};
+\ No newline at end of file
++};
+diff --git a/node_modules/knex/node_modules/chalk/node_modules/escape-string-regexp/package.json b/node_modules/knex/node_modules/chalk/node_modules/escape-string-regexp/package.json
+index 1869ab2..bcebdf9 100644
+--- a/node_modules/knex/node_modules/chalk/node_modules/escape-string-regexp/package.json
++++ b/node_modules/knex/node_modules/chalk/node_modules/escape-string-regexp/package.json
+@@ -58,5 +58,5 @@
+   "_id": "escape-string-regexp@1.0.5",
+   "_shasum": "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4",
+   "_resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz",
+-  "_from": "escape-string-regexp@>=1.0.0 <2.0.0"
++  "_from": "escape-string-regexp@>=1.0.2 <2.0.0"
+ }
