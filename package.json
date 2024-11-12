@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-     "prepare": "patch-package"
+     "postinstall": "patch-package"
   },
   "author": "",
   "license": "ISC",
