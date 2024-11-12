@@ -1,0 +1,18 @@
+{
+  "name": "patcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "i": "^0.3.7",
+    "knex": "^0.7.6",
+    "npm": "^10.9.0",
+    "patch-package": "^1.2.1",
+    "process": "^0.11.10"
+  }
+}
